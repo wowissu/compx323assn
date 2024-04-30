@@ -1,0 +1,9 @@
+{
+  "SQL-Formatter-VSCode.dialect": "plsql",
+  "SQL-Formatter-VSCode.expressionWidth": 50,
+  "SQL-Formatter-VSCode.linesBetweenQueries": 1,
+  "[plsql]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ReneSaarsoo.sql-formatter-vsc"
+  }
+}
