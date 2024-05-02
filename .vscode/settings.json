@@ -5,5 +5,8 @@
   "[plsql]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "xyz.plsql-language"
-  }
+  },
+  "java.project.referencedLibraries": [
+    "ui/lib/**/*.jar"
+  ]
 }
