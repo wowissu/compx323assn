@@ -9,6 +9,7 @@ public class DatabaseConnection {
 
   public DatabaseConnection() {
     try {
+      Class.forName("oracle.jdbc.driver.­OracleDriver");
       conn = DriverManager.getConnection(url, user, pwd);
 
       System.out.println("Connected !");
