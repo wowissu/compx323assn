@@ -1,6 +1,9 @@
 CREATE SEQUENCE meeting_seq
 START WITH 1000 INCREMENT BY 1 NOCACHE NOCYCLE;
 
+CREATE SEQUENCE student_seq
+START WITH 1650000 INCREMENT BY 1 NOCACHE NOCYCLE;
+
 -- Club
 CREATE TABLE club (name VARCHAR(30) PRIMARY KEY, description CLOB);
 
@@ -23,7 +26,7 @@ CREATE TABLE event (
 
 -- Student
 CREATE TABLE student (
-  id VARCHAR(15) PRIMARY KEY,
+  id VARCHAR(15) DEFAULT student_seq.NEXTVAL PRIMARY KEY,
   phone VARCHAR(15),
   name VARCHAR(50)
 );
@@ -44,7 +47,7 @@ CREATE TABLE assignment (
   assignmentName VARCHAR(50) NOT NULL,
   className VARCHAR(30) NOT NULL,
   type VARCHAR(30) NOT NULL,
-  time TIMESTAMP,
+  time DATE,
   CONSTRAINT fk_assignment_class FOREIGN KEY (className) REFERENCES class (name),
   CONSTRAINT pk_assignment PRIMARY KEY (assignmentName, className)
 );

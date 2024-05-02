@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  java:
+    container_name: compx323
+    image: openjdk:latest
+    tty: true
+    volumes:
+      - '..:/workspaces'
