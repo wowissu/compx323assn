@@ -7,10 +7,11 @@ public class DatabaseConnection {
   String pwd = "VXMhcqpzQw";
   Connection conn;
 
-  public void DatabaseConnection() {
+  public DatabaseConnection() {
     try {
       conn = DriverManager.getConnection(url, user, pwd);
 
+      System.out.println("Connected !");
       // step3 create the statement object
       // Statement stmt = conn.createStatement();
 
@@ -21,13 +22,14 @@ public class DatabaseConnection {
       // System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " +
       // rs.getString(3));
       // }
-
     } catch (Exception e) {
       System.out.println(e);
     }
   }
 
   public void close() throws SQLException {
-    conn.close();
+    if (conn != null) {
+      conn.close();
+    }
   }
 }
