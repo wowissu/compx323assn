@@ -1,4 +1,5 @@
 import java.sql.*;
+import oracle.jdbc.driver.OracleDriver;
 
 public class DatabaseConnection {
 
@@ -9,7 +10,7 @@ public class DatabaseConnection {
 
   public DatabaseConnection() {
     try {
-      Class.forName("oracle.jdbc.driver.­OracleDriver");
+      Class.forName("oracle.jdbc.driver.OracleDriver");
       conn = DriverManager.getConnection(url, user, pwd);
 
       System.out.println("Connected !");
