@@ -1,1 +1,4 @@
-set CLASSPATH="C:\Users\zs284\Documents\compx323assn\ui;C:\Users\zs284\Documents\compx323assn\ui\lib\ojdbc11.jar"
+git config --global user.name wowissu
+git config --global user.email bbgbbg0123
+
+set CLASSPATH=%cd%\ui;%cd%\ui\lib\ojdbc11.jar
