@@ -14,6 +14,7 @@ public class UIRender {
 
   public UIRender(String title, int width, int height) {
     mainPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
 
     frame = new JFrame(title);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,6 +48,13 @@ public class UIRender {
     return createInput(name, label, 20);
   }
 
+  static UIComboBox createComboBox(String name, String label, String[] choices) {
+    UIComboBox comp = new UIComboBox(name, label, choices);
+    map.put(name, comp);
+
+    return comp;
+  }
+
   static JPanel createYPanel(LayoutManager layout, boolean isDoubleBuffered) {
     JPanel panel = new JPanel(layout, isDoubleBuffered);
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -58,12 +66,14 @@ public class UIRender {
     return createYPanel(new FlowLayout(FlowLayout.LEFT), true);
   }
 
-  static JButton createSubmitButton(String text, ActionListener listener) {
+  static JPanel createSubmitButton(String text, ActionListener listener) {
+    JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JButton button = new JButton(text);
 
     button.addActionListener(listener);
+    panel.add(button);
 
-    return button;
+    return panel;
   }
 
   static <E extends UIComponent> E get(String name, Class<E> type) {

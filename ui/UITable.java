@@ -1,18 +1,20 @@
 import javax.swing.*; 
-import java.awt.*; 
-import java.awt.event.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
-public class UITable extends UIComponent<JTable> {
+public class UITable extends UIComponent<JScrollPane> {
     public String[] columns;
     public String[][] data;
+    public JTable table;
 
     public UITable (String name) {
         super(name);
 
-
-        JTable table = new JTable();
-        setRoot(table);
+        JScrollPane scroll = new JScrollPane();
+        setRoot(scroll);
+        
+        table = new JTable();
+        scroll.setViewportView(table);
     }
 
     public UITable setColumns(String[] columns) {
@@ -28,11 +30,14 @@ public class UITable extends UIComponent<JTable> {
 
         return this;
     }
+
+    public void setModel(TableModel model) {
+        this.table.setModel(model);
+    }
     
     private void update () {
-        String[] columnNames = this.columns;
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(this.data, this.columns);
 
-        this.root.setModel(model);
+        setModel(model);
     }
 }

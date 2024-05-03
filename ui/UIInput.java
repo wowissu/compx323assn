@@ -10,8 +10,7 @@ public class UIInput extends UIComponent<JPanel> {
 
     public UIInput(String name, String label, int textColumns) {
         super(name);
-        this.name = name;
-
+        
         root = new JPanel(new FlowLayout(FlowLayout.LEFT));
         this.setRoot(root);
 

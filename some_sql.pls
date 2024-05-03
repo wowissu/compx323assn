@@ -1,5 +1,5 @@
 -- What is a student's classes & the events(location)
-SELECT chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime
+SELECT s.* chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime
     FROM student s 
     JOIN class_has_student chs ON s.id = chs.studentID
     JOIN class c ON c.name = chs.className

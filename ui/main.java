@@ -1,6 +1,9 @@
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -19,9 +22,16 @@ public class main {
   public static void main(String[] args) {
     db = new DatabaseConnection();
     render = createRender();
-    JComponent form = createForm();
+
+    // JPanel layout = UIRender.createYPanel();
+    JLabel header = new JLabel("Find student's classes.");
+
+    UITable table = createTable();
+    JComponent form = createForm(table);
     
+    render.add(header);
     render.add(form);
+    render.add(table.root);
     render.setVisible(true);
   }
 
@@ -45,23 +55,40 @@ public class main {
     return render;
   }
 
-  static JComponent createForm() {
-    UIInput studentNameInput = UIRender.createInput("studentName", "Enter student name:");
-    JButton submitButton = UIRender.createSubmitButton("Submit", new ActionListener() {
+  static UITable createTable() {
+    return new UITable("table");
+  }
+
+  static JComponent createForm(UITable uiTable) {
+    UIInput studentIDInput = UIRender.createInput("studentID", "Enter student id:");
+    UIComboBox eventTypeComboBox = UIRender.createComboBox("eventType", "Choice a event type", new String[]{"All", "Laboratory", "Tutorial", "Lecture"});
+
+    JPanel submitButton = UIRender.createSubmitButton("Submit", new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         try {
           List<String> optionalParams = new ArrayList<>();
-          String sql = "SELECT chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime "
+
+          // sql
+          String sql = "SELECT s.id, s.name, chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime "
           + "FROM student s "
           + "JOIN class_has_student chs ON s.id = chs.studentID "
           + "JOIN class c ON c.name = chs.className "
           + "JOIN event e ON c.name = e.className";
-          
-          String studentName = UIRender.get("studentName", UIInput.class).getValue();
-          System.out.println("student name: " + studentName);
-          if (studentName != null && !studentName.trim().isEmpty()) {
-            sql = sql.concat(" WHERE s.name LIKE ?");
-            optionalParams.add("%" + studentName + "%");
+           
+          // student id
+          String studentIDSearching = UIRender.get("studentID", UIInput.class).getValue();
+          if (studentIDSearching != null && !studentIDSearching.trim().isEmpty()) {
+            System.out.println("search student id: " + studentIDSearching);
+            sql = sql.concat(" WHERE s.id = ?");
+            optionalParams.add(studentIDSearching);
+          }
+
+          // event type
+          String eventTypeSearching = UIRender.get("eventType", UIComboBox.class).getValue();
+          if (eventTypeSearching != null && !eventTypeSearching.trim().isEmpty() && !eventTypeSearching.equals("All")) {
+            System.out.println("search eventType: " + eventTypeSearching);
+            sql = sql.concat(" AND e.type = ?");
+            optionalParams.add(eventTypeSearching);
           }
 
           PreparedStatement stmt = db.conn.prepareStatement(sql);
@@ -71,28 +98,20 @@ public class main {
           }
           ResultSet rs = stmt.executeQuery();
 
-          List<Event> evtList = new ArrayList<Event>();
-
-          DefaultTableModel model = new DefaultTableModel();
+          DefaultTableModel model = new DefaultTableModel(new String[]{"studentID", "studentName", "className", "locationRoom","eventType", "eventTime"}, 0);
 
           while (rs.next()) {
-            Event evt = new Event();
-            evt.setClassName(rs.getString("className"));
-            evt.setLocationRoom(rs.getString("locationRoom"));
-            evt.setEventType(rs.getString("eventType"));
-            evt.setEventTime(rs.getString("eventTime"));
-            evtList.add(evt);
-
+            String studentID = rs.getString("id");
+            String studentName = rs.getString("name");
             String className = rs.getString("className");
             String locationRoom = rs.getString("locationRoom");
             String eventType = rs.getString("eventType");
             String eventTime = rs.getString("eventTime");
-
             
-            model.addRow(new Object[]{className, locationRoom, eventType, eventTime});
+            model.addRow(new Object[]{studentID, studentName, className, locationRoom, eventType, eventTime});
           }
 
-          System.out.println(evtList.size());
+          uiTable.setModel(model);
 
           rs.close();
           stmt.close();
@@ -103,7 +122,8 @@ public class main {
     });
 
     JPanel form = UIRender.createYPanel();
-    form.add(studentNameInput.root);
+    form.add(studentIDInput.root);
+    form.add(eventTypeComboBox.root);
     form.add(submitButton);
 
     return form;
