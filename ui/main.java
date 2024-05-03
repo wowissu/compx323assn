@@ -104,7 +104,7 @@ public class main {
             String studentID = rs.getString("id");
             String studentName = rs.getString("name");
             String className = rs.getString("className");
-            String locationRoom = rs.getString("locationRoom");
+            String locationRoom = rs.getString("locationRoom");c
             String eventType = rs.getString("eventType");
             String eventTime = rs.getString("eventTime");
             
