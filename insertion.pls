@@ -15,9 +15,9 @@ INSERT INTO location (room) VALUES ('Room C');
 
 -- Insert data into event table
 -- Assuming the type column is optional
-INSERT INTO event (className, locationRoom, type, time) VALUES ('Compx323', 'Room A', 'Workshop', '12:00:00');
-INSERT INTO event (className, locationRoom, time) VALUES ('Compx322', 'Room B', '11:00:00');
-INSERT INTO event (className, locationRoom, type, time) VALUES ('Compx301', 'Room C', 'Seminar', '14:00:00');
+INSERT INTO event (className, locationRoom, type, time) VALUES ('Compx323', 'Room A', 'Laboratory', to_date('12:00:00', 'HH24:MI:SS'));
+INSERT INTO event (className, locationRoom, type, time) VALUES ('Compx322', 'Room B', 'Tutorial', to_date('11:00:00', 'HH24:MI:SS'));
+INSERT INTO event (className, locationRoom, type, time) VALUES ('Compx301', 'Room C', 'Lecture', to_date('14:00:00', 'HH24:MI:SS'));
 
 -- Insert data into student table
 INSERT INTO student (id, phone, name) VALUES ('1651328', '123456789', 'John Doe');
@@ -25,8 +25,8 @@ INSERT INTO student (id, phone, name) VALUES ('1657827', '987654321', 'Jane Smit
 INSERT INTO student (id, phone, name) VALUES ('1658920', '456789123', 'Alice Johnson');
 
 -- Insert data into meeting table
-INSERT INTO meeting ("date", startTime, endTime, minutes, locationRoom) VALUES ('2024-04-30', '13:00:00', '14:00:00', 'Meeting minutes for meeting 1', 'Room A');
-INSERT INTO meeting ("date", startTime, endTime, minutes, locationRoom) VALUES ('2024-04-03', '14:00:00', '15:00:00', 'Meeting minutes for meeting 2', 'Room B');
+INSERT INTO meeting ("date", startTime, endTime, minutes, locationRoom) VALUES (to_date('2024-04-30', 'YYYY-MM-DD'), to_date('13:00:00', 'HH24:MI:SS'), to_date('14:00:00', 'HH24:MI:SS'), 'Meeting minutes for meeting 1', 'Room A');
+INSERT INTO meeting ("date", startTime, endTime, minutes, locationRoom) VALUES (to_date('2024-04-03', 'YYYY-MM-DD'), to_date('14:00:00', 'HH24:MI:SS'), to_date('15:00:00', 'HH24:MI:SS'), 'Meeting minutes for meeting 2', 'Room B');
 
 -- Insert data into assignment table
 -- Assuming the time column is optional

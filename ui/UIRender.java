@@ -1,9 +1,13 @@
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowListener;
+import java.util.Collection;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 public class UIRender {
 
@@ -32,10 +36,14 @@ public class UIRender {
     frame.addWindowListener(l);
   }
 
-  static JPanel createInput(String label, int textColumns) {
+  static JPanel createInput(String label, int textColumns, InputList collector) {
     JPanel panelComp = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel labelComp = new JLabel(label);
     JTextField textFieldComp = new JTextField(textColumns);
+
+    if (collector != null) {
+      collector.add(textFieldComp);
+    }
 
     panelComp.add(labelComp);
     panelComp.add(textFieldComp);
@@ -43,8 +51,8 @@ public class UIRender {
     return panelComp;
   }
 
-  static JPanel createInput(String label) {
-    return createInput(label, 20);
+  static JPanel createInput(String label, InputList collector) {
+    return createInput(label, 20, collector);
   }
 
   static JPanel createYPanel(LayoutManager layout, boolean isDoubleBuffered) {
@@ -56,5 +64,13 @@ public class UIRender {
 
   static JPanel createYPanel() {
     return createYPanel(new FlowLayout(FlowLayout.LEFT), true);
+  }
+
+  static JButton createSubmitButton(String text, ActionListener listener) {
+    JButton button = new JButton(text);
+
+    button.addActionListener(listener);
+
+    return button;
   }
 }
