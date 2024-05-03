@@ -1,13 +1,11 @@
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowListener;
-import java.util.Collection;
+import java.util.HashMap;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 
 public class UIRender {
 
@@ -36,23 +34,17 @@ public class UIRender {
     frame.addWindowListener(l);
   }
 
-  static JPanel createInput(String label, int textColumns, InputList collector) {
-    JPanel panelComp = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JLabel labelComp = new JLabel(label);
-    JTextField textFieldComp = new JTextField(textColumns);
+  static HashMap<String, UIComponent> map = new HashMap<String, UIComponent>();
 
-    if (collector != null) {
-      collector.add(textFieldComp);
-    }
+  static UIInput createInput(String name, String label, int textColumns) {
+    UIInput comp = new UIInput(name, label, textColumns);
+    map.put(name, comp);
 
-    panelComp.add(labelComp);
-    panelComp.add(textFieldComp);
-
-    return panelComp;
+    return comp;
   }
 
-  static JPanel createInput(String label, InputList collector) {
-    return createInput(label, 20, collector);
+  static UIInput createInput(String name, String label) {
+    return createInput(name, label, 20);
   }
 
   static JPanel createYPanel(LayoutManager layout, boolean isDoubleBuffered) {
@@ -72,5 +64,15 @@ public class UIRender {
     button.addActionListener(listener);
 
     return button;
+  }
+
+  static <E extends UIComponent> E get(String name, Class<E> type) {
+    UIComponent component = map.get(name);
+
+    if (type.isInstance(component)) {
+      return type.cast(component);
+    } else {
+      return null;
+    }
   }
 }

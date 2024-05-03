@@ -6,9 +6,11 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "xyz.plsql-language"
   },
-  "java.project.referencedLibraries": [
-    "ui/lib/**/*.jar"
-  ],
+  "java.project.referencedLibraries": {
+    "include": [
+      "ui/lib/**/*.jar"
+    ]
+  },
   "terminal.integrated.defaultProfile.windows": "Cmder",
 
   "terminal.integrated.profiles.windows": {

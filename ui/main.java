@@ -1,7 +1,6 @@
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.text.JTextComponent;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -9,14 +8,25 @@ import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class main {
-  public static void main(String[] args) {
-    DatabaseConnection db = new DatabaseConnection();
 
+  static DatabaseConnection db;
+  static UIRender render;
+
+  public static void main(String[] args) {
+    db = new DatabaseConnection();
+    render = createRender();
+    JComponent form = createForm();
+    
+    render.add(form);
+    render.setVisible(true);
+  }
+
+
+  static UIRender createRender() {
     UIRender render = new UIRender("Simple Form", 300, 400);
 
     render.onClose(new WindowAdapter() {
@@ -32,77 +42,70 @@ public class main {
       }
     });
 
-    InputList inputList = new InputList();
-    JPanel yPanel = UIRender.createYPanel();
-    JPanel studentNameInput = UIRender.createInput("Enter student name:", inputList);
-    JPanel classInput = UIRender.createInput("Enter class:", inputList);
+    return render;
+  }
+
+  static JComponent createForm() {
+    UIInput studentNameInput = UIRender.createInput("studentName", "Enter student name:");
     JButton submitButton = UIRender.createSubmitButton("Submit", new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        for (JTextComponent inputComp : inputList) {
-          String text = inputComp.getText();
-          System.out.println("Hello, " + text + "!");
-        }
-
         try {
-          Statement stmt = db.conn.createStatement();
-          ResultSet rs = stmt.executeQuery("SELECT s.* FROM student s WHERE s.name LIKE '%John%'");
-
-          while (rs.next()) {
-            System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " +
-            rs.getString("name"));
+          List<String> optionalParams = new ArrayList<>();
+          String sql = "SELECT chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime "
+          + "FROM student s "
+          + "JOIN class_has_student chs ON s.id = chs.studentID "
+          + "JOIN class c ON c.name = chs.className "
+          + "JOIN event e ON c.name = e.className";
+          
+          String studentName = UIRender.get("studentName", UIInput.class).getValue();
+          System.out.println("student name: " + studentName);
+          if (studentName != null && !studentName.trim().isEmpty()) {
+            sql = sql.concat(" WHERE s.name LIKE ?");
+            optionalParams.add("%" + studentName + "%");
           }
 
-          // //   step3 create the statement object
-          // // PreparedStatement stmt = db.conn.prepareStatement(
-          // //   "SELECT chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime "
-          // //   + "FROM student s "
-          // //   + "JOIN class_has_student chs ON s.id = chs.studentID "
-          // //   + "JOIN class c ON c.name = chs.className "
-          // //   + "JOIN event e ON c.name = e.className "
-          // //   + "WHERE s.name LIKE ?");
-          // // stmt.setString(1, "%John%");
+          PreparedStatement stmt = db.conn.prepareStatement(sql);
+          int index = 0;
+          for (String params : optionalParams) {
+            stmt.setString(++index, params);
+          }
+          ResultSet rs = stmt.executeQuery();
 
-          // List<Event> evtList = new ArrayList<Event>();
-          // ResultSet rs = stmt.executeQuery("SELECT s.* FROM student s WHERE s.name LIKE '%John%'");
+          List<Event> evtList = new ArrayList<Event>();
 
-          // // PreparedStatement stmt = db.conn.prepareStatement("SELECT s.* FROM student s WHERE s.name LIKE '%John%'");
-          // // ResultSet rs = stmt.executeQuery();
+          DefaultTableModel model = new DefaultTableModel();
 
-          // System.out.println("before while");
+          while (rs.next()) {
+            Event evt = new Event();
+            evt.setClassName(rs.getString("className"));
+            evt.setLocationRoom(rs.getString("locationRoom"));
+            evt.setEventType(rs.getString("eventType"));
+            evt.setEventTime(rs.getString("eventTime"));
+            evtList.add(evt);
 
-          // while (rs.next()) {
-          //   System.out.print("loop rs");
+            String className = rs.getString("className");
+            String locationRoom = rs.getString("locationRoom");
+            String eventType = rs.getString("eventType");
+            String eventTime = rs.getString("eventTime");
 
-          //   Event evt = new Event();
+            
+            model.addRow(new Object[]{className, locationRoom, eventType, eventTime});
+          }
 
-          //   evt.setClassName(rs.getString("className"));
-          //   evt.setLocationRoom(rs.getString("locationRoom"));
-          //   evt.setEventType(rs.getString("eventType"));
-          //   evt.setEventTime(rs.getString("eventTime"));
-
-          //   System.out.print(evt);
-
-          //   evtList.add(evt);
-          // }
-
-          System.out.println("end while");
+          System.out.println(evtList.size());
 
           rs.close();
           stmt.close();
-
         } catch (SQLException ex) {
           System.out.print(ex);
         }
       }
     });
 
-    yPanel.add(studentNameInput);
-    yPanel.add(classInput);
-    yPanel.add(submitButton);
+    JPanel form = UIRender.createYPanel();
+    form.add(studentNameInput.root);
+    form.add(submitButton);
 
-    
-
-    render.add(yPanel);
-    render.setVisible(true);
+    return form;
   }
 }
