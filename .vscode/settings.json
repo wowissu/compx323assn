@@ -17,7 +17,6 @@
       "Cmder": {
           "name": "Cmder",
           "path": [
-            
               "${env:windir}\\Sysnative\\cmd.exe",
               "${env:windir}\\System32\\cmd.exe"
           ],
