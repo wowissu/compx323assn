@@ -116,7 +116,7 @@ def genClue():
             n = fake.name()
             if n in names: continue
             else: names.add(n)
-            clubs.append({ 'name': n, 'description': fake.text() })
+            clubs.append({ 'name': n, 'description': fake.paragraph(nb_sentences = 4) })
     
         return clubs
     return gen
