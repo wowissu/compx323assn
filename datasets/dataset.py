@@ -6,39 +6,83 @@ import csv
 fake = Faker()
 
 def main():
-    clubs = makeClue()(500)
-    students = makeStudent()(1000)
-    classes = makeClasses()(100)
-    locations = makeLocations()(1000)
-    classHasStudent = makeClassHasStudent(students, classes)(min = 3, max = 10)
-    events = makeEvents(classes, locations)(min = 3, max = 5)
-    assignments = makeAssignments(classes)(0, 3)
-    (curriculars, meetings) = makeCurriculars(assignments, locations)(1000)
-    (co_curriculars, co_meetings) = makeCoCurriculars(locations, max_cost=1000)(1000)
+    clubs = genClue()(500)
+    students = genStudent()(10000)
+    classes = genClasses()(300)
+    locations = genLocations()(1000)
+    # each class has students from min to max
+    (classHasStudents, classStudentsDict) = genClassHasStudents(students, classes)(min = 12, max = 30)
+    # each class has locations from min to max
+    events = genEvents(classes, locations)(min = 3, max = 5)
+    # each class has assignments from min to max
+    (assignments, classAssnDict) = genAssignments(classes)(min = 0, max = 3)
+
+    (curriculars, meetings, registereds) = genStudentsHaveCurriculars(classStudentsDict, classAssnDict, locations)()
+
+    # (curriculars, meetings) = genCurriculars(assignments, locations)(1000)
+    (co_curriculars, co_meetings) = genCoCurriculars(locations, max_cost=1000)(1000)
+    co_registereds = genStudentJoinCoCurricular(students, co_curriculars)(10000)
+    
+    coCurricularHasClub = genCoCurricularHasClub(co_curriculars, clubs)(10000)
+
     meetings = meetings + co_meetings
-    coCurricularHasClub = makeCoCurricularHasClub(co_curriculars, clubs)(10000)
-    registered = makeRegistered(classHasStudent, curriculars)()
+    registereds = registereds + co_registereds
     
     to_csv('./csv/clubs.csv', clubs)
     to_csv('./csv/students.csv', students)
     to_csv('./csv/classes.csv', classes)
     to_csv('./csv/locations.csv', locations)
-    to_csv('./csv/classHasStudent.csv', classHasStudent)
+    to_csv('./csv/classHasStudents.csv', classHasStudents)
     to_csv('./csv/events.csv', events)
     to_csv('./csv/assignments.csv', assignments)
     to_csv('./csv/curriculars.csv', curriculars)
     to_csv('./csv/co_curriculars.csv', co_curriculars)
     to_csv('./csv/meetings.csv', meetings)
     to_csv('./csv/coCurricularHasClub.csv', coCurricularHasClub)
-    to_csv('./csv/registered.csv', registered)
+    to_csv('./csv/registereds.csv', registereds)
 
-def makeStudent(): 
+
+def genStudentsHaveCurriculars(classStudentsDict, classAssnDict, locations):
+    def gen():
+        curriculars = []
+        meetings = []
+        registereds = []
+
+        # divide students
+        for cName in classStudentsDict:
+            if cName in classAssnDict: 
+                assns = classAssnDict[cName]
+                students = classStudentsDict[cName]
+                groups = [students[x:x+3] for x in range(0, len(students), 3)]
+
+                for group in groups:
+                    for assn in assns:     
+                        meeting = makeMeeting(random.choice(locations))
+                        curricular = makeCurricular(meeting, assn)
+                        registereds += [makeRegistered(student['studentID'], curricular['meetingID']) for student in group]
+                        meetings.append(meeting)
+                        curriculars.append(curricular)                
+
+        return (tuple(curriculars), tuple(meetings), tuple(registereds))
+    return gen
+
+def genStudentJoinCoCurricular(students, co_curriculars):
+    def gen(amount):
+        registereds = []
+
+        for i in range(amount):
+            registereds.append(makeRegistered(random.choice(students)['id'], random.choice(co_curriculars)['meetingID']))
+
+        return tuple(registereds)
+    return gen
+
+def genStudent(): 
     def gen(amount):
         studentIDs = set(fake.unique.random_int(min=1650000, max=1750000) for i in range(amount))
         students = []
         for id in studentIDs:
             students.append({ 'id': id, 'name': fake.name(), 'phone': fake.phone_number() })
-        return students
+        return tuple(students)
     return gen
 
 def makeClassNames(amount):
@@ -52,30 +96,18 @@ def makeClassNames(amount):
 
     return tuple(classnames)
 
-def makeLocationRooms(amount):
-    buildings = ('R', 'S', 'L', 'K', 'H', 'MSB')
-    floors = ('G', '1', '2', '3', '4')
-    roomNumbers = tuple(str(i + 1) for i in range(30))
-    locations = set()
-    
-    for i in range(amount):
-        room = random.choice(buildings) + '.' + random.choice(floors) + '.' + random.choice(roomNumbers)
-        locations.add(room)
-        
-    return tuple(locations)
-
-def makeClasses():
+def genClasses():
     def gen(amount):
         return tuple([{ 'name': name } for name in makeClassNames(amount)])
     return gen
     
 
-def makeLocations():
+def genLocations():
     def gen(amount):
         return tuple([{ 'room': room } for room in makeLocationRooms(amount)])
     return gen
     
-def makeClue(): 
+def genClue(): 
     def gen(amount):
         names = set()
         clubs = []
@@ -89,24 +121,22 @@ def makeClue():
         return clubs
     return gen
 
-def makeClassHasStudent(students, classes):
+def genClassHasStudents(students, classes):
     def gen(min, max):
         has = []
-        
-        for student in students:
+        classStudentsDict = dict()
+
+        for c in classes: 
             count = random.randint(min, max)
-            # each student must have at least 3 events
-            for c in random.sample(classes, count):
-                has.append({
-                    'studentID': student['id'],
-                    'className': c['name'],
-                })
+            cStudents = [{ 'studentID': s['id'], 'className': c['name'], } for s in random.sample(students, count)]
+            has += cStudents
+            classStudentsDict[c['name']] = cStudents
                 
-        return tuple(has)
+        return (tuple(has), classStudentsDict)
     return gen    
     
 # each class has to have at least min locations
-def makeEvents(classes, locations):
+def genEvents(classes, locations):
     types = ('Lecture', 'Lab', 'Tutorial')
     
     def gen(min, max):
@@ -123,32 +153,32 @@ def makeEvents(classes, locations):
     return gen
 
 # each class has to have at least min assignment
-def makeAssignments(classes): 
+def genAssignments(classes): 
     types = ('Assignment', 'Test', 'Quiz')
     # min size of assignment for a class
     # max size of assignment for a class
     def gen(min, max):
         assignments = []
+        classAssnDict = dict()
         for c in classes: 
-            for l in range(random.randint(min, max)): 
-                assignments.append({
-                    'assignmentName': fake.name(),
-                    'className': c['name'],
-                    'type': random.choice(types),
-                    'time': fake.date_time_this_year().strftime('%Y-%m-%d %H:00:00')
-                })
-        return tuple(assignments)
+            assn = [{
+                'assignmentName': fake.name(),
+                'className': c['name'],
+                'type': random.choice(types),
+                'time': fake.date_time_this_year().strftime('%Y-%m-%d %H:00:00')
+            } for l in range(random.randint(min, max))]
+            assignments += assn
+            classAssnDict[c['name']] = assn
+        return (tuple(assignments), classAssnDict)
     return gen
-
-def makeCurriculars(assignments, locations): 
-    mm = makeMeeting(locations)
     
+def genCurriculars(assignments, locations): 
     def gen(amount):
         meetings = []
         curriculars = []
         
         for i in range(amount): 
-            meeting = mm()
+            meeting = makeMeeting(random.choice(locations))
             a = random.choice(assignments)
             curriculars.append({ 'meetingID': meeting['id'], 'assignmentName': a['assignmentName'], 'className': a['className'] })
             meetings.append(meeting)
@@ -156,40 +186,20 @@ def makeCurriculars(assignments, locations):
         return (tuple(curriculars), tuple(meetings))
     return gen
 
-def makeCoCurriculars(locations, max_cost): 
-    mm = makeMeeting(locations)
-    
+def genCoCurriculars(locations, max_cost): 
     def gen(amount):
         meetings = []
         curriculars = []
         
         for i in range(amount): 
-            meeting = mm()
+            meeting = makeMeeting(random.choice(locations))
             curriculars.append({ 'meetingID': meeting['id'], 'cost': random.randint(0, max_cost) })
             meetings.append(meeting)
             
         return (tuple(curriculars), tuple(meetings))
     return gen
 
-def makeMeeting(locations):
-    def gen(): 
-        h = random.randint(1, 3)
-        l = random.choice(locations)
-        d = fake.date_time().replace(hour=0, minute=0, second=0, microsecond=0)
-        start = fake.date_time_between(d + timedelta(hours=(8)), d + timedelta(hours=(17)))
-        end = start + timedelta(hours=h)
-        
-        return {
-            'id': fake.unique.random_int(min=1000),
-            'date': start.strftime('%Y-%m-%d'),
-            'startTime': start.strftime('%H:00:00'),
-            'endTime': end.strftime('%H:00:00'),
-            'minutes': fake.text(),
-            'locationRoom': l['room'],
-        }
-    return gen
-
-def makeCoCurricularHasClub(co_curriculars, clubs):
+def genCoCurricularHasClub(co_curriculars, clubs):
     def gen(amount):
         keys = set()
         has = []
@@ -211,14 +221,14 @@ def makeCoCurricularHasClub(co_curriculars, clubs):
         return tuple(has)
     return gen
 
-def makeRegistered(classHasStudent, curriculars):
+def genRegistereds(classHasStudents, curriculars):
     def gen():
         studentCurriculars = dict()
         registered = []
         assignmentStudentIDs = dict()
         
         for co in curriculars: 
-            assignmentStudentIDs[co['assignmentName']] = (co, [chs['studentID'] for chs in filter(lambda chs: chs['className'] == co['className'], classHasStudent)]) 
+            assignmentStudentIDs[co['assignmentName']] = (co, [chs['studentID'] for chs in filter(lambda chs: chs['className'] == co['className'], classHasStudents)]) 
         
         for aName in assignmentStudentIDs:
             (co, studentIDs) = assignmentStudentIDs[aName]
@@ -233,14 +243,52 @@ def makeRegistered(classHasStudent, curriculars):
         return tuple(registered)
     return gen
 
+def makeLocationRooms(amount):
+    buildings = ('R', 'S', 'L', 'K', 'H', 'MSB')
+    floors = ('G', '1', '2', '3', '4')
+    roomNumbers = tuple(str(i + 1) for i in range(30))
+    locations = set()
+    
+    for i in range(amount):
+        room = random.choice(buildings) + '.' + random.choice(floors) + '.' + random.choice(roomNumbers)
+        locations.add(room)
+        
+    return tuple(locations)
+
+def makeRegistered(studentID, meetingID):
+    return {
+        'studentID': studentID,
+        'meetingID': meetingID,
+        'attendance': random.choice(['Y', 'N'])
+    }
+
+def makeCurricular(meeting, assignment):
+    return {
+        'meetingID': meeting['id'], 'assignmentName': assignment['assignmentName'], 'className': assignment['className']
+    }
+
+def makeMeeting(location):
+    h = random.randint(1, 3)
+    d = fake.date_time().replace(hour=0, minute=0, second=0, microsecond=0)
+    start = fake.date_time_between(d + timedelta(hours=(8)), d + timedelta(hours=(17)))
+    end = start + timedelta(hours=h)
+    
+    return {
+        'id': fake.unique.random_int(min=1000),
+        'date': start.strftime('%Y-%m-%d'),
+        'startTime': start.strftime('%H:00:00'),
+        'endTime': end.strftime('%H:00:00'),
+        'minutes': fake.text(),
+        'locationRoom': location['room'],
+    }
+
 def to_csv(filename, data): 
-    csv_file = filename
-    csv_obj = open(csv_file, 'w') 
-    csv_writer = csv.writer(csv_obj)
-    header = data[0].keys()
-    csv_writer.writerow(header)
-    for item in data:
-        csv_writer.writerow(item.values())
-    csv_obj.close()
+    #!python3
+    with open(filename, 'w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+        header = data[0].keys()
+        csv_writer.writerow(header)
+        for item in data:
+            csv_writer.writerow(item.values())
 
 main()
