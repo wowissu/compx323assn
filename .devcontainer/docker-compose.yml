@@ -2,8 +2,14 @@ version: '3'
 
 services:
   java:
-    container_name: compx323
+    container_name: compx323_java
     image: openjdk:latest
+    tty: true
+    volumes:
+      - '..:/workspaces'
+  python: 
+    container_name: compx323_py
+    build: ./
     tty: true
     volumes:
       - '..:/workspaces'
