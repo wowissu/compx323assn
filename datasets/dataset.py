@@ -7,7 +7,7 @@ fake = Faker()
 
 def main():
     clubs = genClue()(500)
-    students = genStudent()(10000)
+    students = genStudents()(10000)
     classes = genClasses()(300)
     locations = genLocations()(1000)
     # each class has students from min to max
@@ -28,18 +28,18 @@ def main():
     meetings = meetings + co_meetings
     registereds = registereds + co_registereds
     
-    to_csv('./csv/clubs.csv', clubs)
-    to_csv('./csv/students.csv', students)
-    to_csv('./csv/classes.csv', classes)
-    to_csv('./csv/locations.csv', locations)
-    to_csv('./csv/classHasStudents.csv', classHasStudents)
-    to_csv('./csv/events.csv', events)
-    to_csv('./csv/assignments.csv', assignments)
-    to_csv('./csv/curriculars.csv', curriculars)
-    to_csv('./csv/co_curriculars.csv', co_curriculars)
-    to_csv('./csv/meetings.csv', meetings)
-    to_csv('./csv/coCurricularHasClub.csv', coCurricularHasClub)
-    to_csv('./csv/registereds.csv', registereds)
+    to_csv('./csv/club.csv', clubs)
+    to_csv('./csv/student.csv', students)
+    to_csv('./csv/class.csv', classes)
+    to_csv('./csv/location.csv', locations)
+    to_csv('./csv/class_has_student.csv', classHasStudents)
+    to_csv('./csv/event.csv', events)
+    to_csv('./csv/assignment.csv', assignments)
+    to_csv('./csv/curricular.csv', curriculars)
+    to_csv('./csv/co_curricular.csv', co_curriculars)
+    to_csv('./csv/meeting.csv', meetings)
+    to_csv('./csv/co_curricular_has_club.csv', coCurricularHasClub)
+    to_csv('./csv/registered.csv', registereds)
 
 
 def genStudentsHaveCurriculars(classStudentsDict, classAssnDict, locations):
@@ -76,12 +76,12 @@ def genStudentJoinCoCurricular(students, co_curriculars):
         return tuple(registereds)
     return gen
 
-def genStudent(): 
+def genStudents(): 
     def gen(amount):
         studentIDs = set(fake.unique.random_int(min=1650000, max=1750000) for i in range(amount))
         students = []
         for id in studentIDs:
-            students.append({ 'id': id, 'name': fake.name(), 'phone': fake.phone_number() })
+            students.append({ 'id': id, 'name': fake.name(), 'phone': fake.phone_number()[:20] })
         return tuple(students)
     return gen
 
@@ -278,7 +278,7 @@ def makeMeeting(location):
         'date': start.strftime('%Y-%m-%d'),
         'startTime': start.strftime('%H:00:00'),
         'endTime': end.strftime('%H:00:00'),
-        'minutes': fake.text(),
+        'minutes': fake.paragraph(nb_sentences=5),
         'locationRoom': location['room'],
     }
 

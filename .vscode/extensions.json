@@ -7,7 +7,8 @@
 		"Oracle.oracledevtools",
         "vscjava.vscode-java-pack",
 		"donjayamanne.python-extension-pack",
-		"Oracle.oracledevtools"
+		"Oracle.oracledevtools",
+		"mechatroner.rainbow-csv"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [

@@ -18,13 +18,13 @@ CREATE TABLE event (
   time TIMESTAMP,
   CONSTRAINT fk_event_class FOREIGN KEY (className) REFERENCES class (name),
   CONSTRAINT fk_event_location FOREIGN KEY (locationRoom) REFERENCES location (room),
-  CONSTRAINT pk_event PRIMARY KEY (className, locationRoom, type)
+  CONSTRAINT pk_event PRIMARY KEY (className, locationRoom, type, time)
 );
 
 -- Student
 CREATE TABLE student (
   id VARCHAR(15) PRIMARY KEY,
-  phone VARCHAR(15),
+  phone VARCHAR(20),
   name VARCHAR(50)
 );
 
