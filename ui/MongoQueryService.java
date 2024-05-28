@@ -13,6 +13,7 @@ import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.exists;
+import static com.mongodb.client.model.Updates.set;
 
 public class MongoQueryService implements QueryService {
 
@@ -26,6 +27,15 @@ public class MongoQueryService implements QueryService {
   }
 
   public void close() {
+  }
+
+  public void updateStudentName(Integer studentID, String newName) {
+    try (MongoClient mongoClient = MongoClients.create(uri)) {
+      MongoDatabase database = mongoClient.getDatabase(dbname);
+      MongoCollection<Document> studentCollection = database.getCollection("student");
+
+      studentCollection.updateOne(eq("_id", studentID), set("name", newName));
+    }
   }
 
   public Object[][] students(Integer studentID, String eventType) {

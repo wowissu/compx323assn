@@ -1,8 +1,12 @@
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +27,7 @@ public class main {
     // JPanel layout = UIRender.createYPanel();
     JLabel header = new JLabel("Find student's classes.");
 
-    UITable table = createTable();
+    UITable table = createTable(service);
     JComponent form = createForm(table);
 
     render.add(header);
@@ -47,8 +51,40 @@ public class main {
     return render;
   }
 
-  static UITable createTable() {
-    return new UITable("table");
+  static UITable createTable(QueryService service) {
+    String[] columnNames = new String[] { "studentID", "studentName", "className", "locationRoom", "eventType",
+        "eventTime" };
+
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        // 使第二列（Name）可编辑
+        return column == 1;
+      }
+    };
+
+    model.addTableModelListener(new TableModelListener() {
+      public void tableChanged(TableModelEvent e) {
+        System.out.println("Why it don't trigger this event????");
+
+        if (e.getType() == TableModelEvent.UPDATE) {
+          int row = e.getFirstRow();
+          int column = e.getColumn();
+          Object newValue = model.getValueAt(row, column);
+
+          if (column == 1) {
+            int studentID = (int) model.getValueAt(row, 0);
+            String newName = (String) newValue;
+
+            service.updateStudentName(studentID, newName);
+          }
+        }
+      }
+    });
+
+    UITable uiTable = new UITable("table", model);
+
+    return uiTable;
   }
 
   static JComponent createForm(UITable uiTable) {
@@ -61,8 +97,6 @@ public class main {
         Integer studentIDInteger = null;
         String studentIDString = UIRender.get("studentID", UIInput.class).getValue();
         String eventTypeString = UIRender.get("eventType", UIComboBox.class).getValue();
-        DefaultTableModel model = new DefaultTableModel(
-            new String[] { "studentID", "studentName", "className", "locationRoom", "eventType", "eventTime" }, 0);
 
         System.out.println(studentIDString);
 
@@ -78,11 +112,11 @@ public class main {
             studentIDInteger,
             eventTypeString);
 
-        for (int i = 0; i < rows.length; i++) {
-          model.addRow(rows[i]);
-        }
+        uiTable.clear();
 
-        uiTable.setModel(model);
+        for (int i = 0; i < rows.length; i++) {
+          uiTable.addRow(rows[i]);
+        }
       }
     });
 

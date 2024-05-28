@@ -6,9 +6,9 @@ import csv
 fake = Faker()
 
 def main():
-    clubs = genClue()(500)
+    clubs = genClue()(50000)
     students = genStudents()(100000)
-    classes = genClasses()(300)
+    classes = genClasses()(3000)
     locations = genLocations()(1000)
     # each class has students from min to max
     (classHasStudents, classStudentsDict) = genClassHasStudents(students, classes)(min = 12, max = 30)
@@ -21,7 +21,7 @@ def main():
 
     # (curriculars, meetings) = genCurriculars(assignments, locations)(1000)
     (co_curriculars, co_meetings) = genCoCurriculars(locations, max_cost=1000)(1000)
-    co_registereds = genStudentJoinCoCurricular(students, co_curriculars)(10000)
+    co_registereds = genStudentJoinCoCurricular(students, co_curriculars)(1000)
     
     coCurricularHasClub = genCoCurricularHasClub(co_curriculars, clubs)(10000)
 
@@ -274,7 +274,7 @@ def makeMeeting(location):
     end = start + timedelta(hours=h)
     
     return {
-        'id': fake.unique.random_int(min=1000),
+        'id': fake.unique.random_int(min=1000, max=999999),
         'date': start.strftime('%Y-%m-%d'),
         'startTime': start.strftime('%H:00:00'),
         'endTime': end.strftime('%H:00:00'),

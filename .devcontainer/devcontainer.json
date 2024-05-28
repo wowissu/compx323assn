@@ -4,7 +4,7 @@
 	"name": "compx323",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "docker-compose.yml",
-  "service": "python",
+  "service": "java",
   "workspaceFolder": "/workspaces",
 	"customizations": {
     // Configure properties specific to VS Code.

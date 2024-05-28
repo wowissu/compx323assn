@@ -2,6 +2,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
 public class OracleQueryService implements QueryService {
   String url = "jdbc:oracle:thin:@oracle.cms.waikato.ac.nz:1521:teaching";
   String user = "zs284";
@@ -27,6 +34,19 @@ public class OracleQueryService implements QueryService {
       }
     } catch (SQLException ex) {
       ex.printStackTrace();
+    }
+  }
+
+  public void updateStudentName(Integer studentID, String newName) {
+    try {
+      String sql = "UPDATE student SET name = ? WHERE id = ?";
+
+      PreparedStatement stmt = db.prepareStatement(sql);
+
+      stmt.setString(0, newName);
+      stmt.setString(1, studentID.toString());
+    } catch (SQLException ex) {
+      System.out.println(ex);
     }
   }
 
