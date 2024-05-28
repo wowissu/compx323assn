@@ -1,0 +1,97 @@
+[
+  {
+    "category": {
+      "$oid": "66453abd3d0654be825115c9"
+    },
+    "title": "Mondella WELS 4 Star 3.4L/min Concerto Back to Wall Rimless Toilet Suite",
+    "rating": 3.7,
+    "price": 297,
+    "features": [
+      "WELS 4 Star, 3.4 L/min",
+      "Ultra Slim Soft Close Seat",
+      "S&P Trap Combination Design",
+      "Adjustable Setting Distance S: 90-180mm P: 180mm",
+      "Bottom or Rear Entry (Rear Entry Kit Sold Separately)"
+    ],
+    "description": "WELS 4 Star, 3.4 L/min \nUltra Slim Soft Close Seat \nS&P Trap Combination Design \nAdjustable Setting Distance S: 90-180mm P: 180mm \nBottom or Rear Entry (Rear Entry Kit Sold Separately) \nAdd some affordable luxury to your bathroom with Mondella. \n \nMondella takes the hard work out of choosing your bathroom ware with our large selection of affordable styles that are on-trend and easy to install. \n \nWith the new Rimless Pan on the Concerto Back to Wall Toilet Suite, cleaning is much easier as water is dispersed around the entirety of the bowl giving a more consistent flush and thereby limiting areas where germs can build up.",
+    "dimensions_product": {
+      "width": "373mm",
+      "height": "835mm",
+      "length": "640mm"
+    },
+    "dimensions_package": {
+      "width": "450mm",
+      "height": "450mm",
+      "length": "650mm"
+    },
+    "weight": "13.5kg",
+    "specifications": {
+      "model_name": "Mondella Concerto Back to Wall Rimless Toilet Suite",
+      "model_number": "0019819",
+      "material": "Vitreous China",
+      "colour": "White"
+    }
+  },
+  {
+    "category": {
+      "$oid": "6645467f3d0654be825115dc"
+    },
+    "title": "Holman 90mm x 6m PVC Stormwater Pipe",
+    "rating": 0,
+    "price": 74.73,
+    "features": [
+      "Used for drainage",
+      "Lengths are available in 1m, 3m and 6m",
+      "Certified to the New Zealand Standards"
+    ],
+    "description": "The Stormwater Pipe is used for drainage of excess rain and ground water in many applications within the urban area. It is ideal for all rainwater Tank plumbing. Approved to all Australian Standards and is Watermarked Approved.",
+    "dimensions_product": {
+      "width": "90mm",
+      "height": "90mm",
+      "depth": "6000mm"
+    },
+    "dimensions_package": {
+      "width": "90mm",
+      "height": "90mm",
+      "depth": "6000mm"
+    },
+    "weight": "4.5kg",
+    "specifications": {
+      "model_name": "Holman 90mm x 6m PVC Stormwater Pipe",
+      "model_number": "SWP90",
+      "material": "Poly Viny Chloride - PVC",
+      "colour": "Other"
+    }
+  },
+  {
+    "category": {
+      "$oid": "664548fa3d0654be825115e2"
+    },
+    "title": "Marley RP80® 80 - 100mm Grey Friars Downpipe Adaptor",
+    "rating": 0,
+    "price": 8.67,
+    "features": [
+      "Will Never Rust",
+      "Made In NZ",
+      "100% Recyclable",
+      "Low Maintenance"
+    ],
+    "description": "The Marley Stratus Design Series® represents a new generation of uPVC designer spouting and downpipe systems. When renovating, replacing existing spouting or building a new home, the Marley Stratus Design Series® offers a premium look designed to perform in any environment.",
+    "dimensions_product": {
+      "width": "100mm",
+      "height": "60mm",
+      "depth": "60mm"
+    },
+    "dimensions_package": {
+      "width": "116mm",
+      "height": "55mm",
+      "depth": "116mm"
+    },
+    "specifications": {
+      "model_name": null,
+      "model_number": "RA80.100.GYF",
+      "material": "uPVC",
+      "colour": "Grey Friars"
+    }
+  }
+]

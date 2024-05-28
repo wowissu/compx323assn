@@ -1,0 +1,17 @@
+[
+  {
+    "_id": { "$oid": 11 },
+    "name": "Chess Club",
+    "description": "A club for chess enthusiasts"
+  },
+  {
+    "_id": { "$oid": 12 },
+    "name": "Music Club",
+    "description": "A club for music lovers"
+  },
+  {
+    "_id": { "$oid": 13 },
+    "name": "Dance Club",
+    "description": "A club for dance enthusiasts"
+  }
+]

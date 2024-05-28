@@ -13,3 +13,23 @@ services:
     tty: true
     volumes:
       - '..:/workspaces'
+
+  mongodb:
+    container_name: compx323_mongo
+    image: mongo:latest
+    tty: true
+    networks:
+      - compx323
+    ports: 
+      - "27017:27017"
+    volumes:
+      - 'mongo:/data/db'
+
+networks:
+  compx323:
+    name: compx323
+    driver: bridge
+
+volumes:
+  mongo:
+    driver: local

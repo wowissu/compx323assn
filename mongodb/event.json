@@ -1,0 +1,17 @@
+[
+  {
+    "_id": { "$oid": 41 },
+    "locationID": { "$oid":  }
+    "room": "Room A", 
+  },
+  {
+    "_id": { "$oid": 42 },
+    "locationID": { "$oid":  }
+    "room": "Room B", 
+  },
+  {
+    "_id": { "$oid": 43 },
+    "locationID": { "$oid":  }
+    "room": "Room C", 
+  }
+]

@@ -1,0 +1,65 @@
+[
+  // 1.  Select all movies directed by Steven Spielberg.
+  { "director": "Steven Spielberg" },
+  
+  // 2.  Find movies that has Harrison Ford as its/one of its actors.
+  {
+    "actor": {
+      "name": "Harrison Ford"
+    }
+  },
+  
+  // 3.  Find all movies that has Quentin Tarantino as director and actor.
+  {
+    "director": "Quentin Tarantino",
+    "actor": {
+      "name": "Quentin Tarantino"
+    }
+  },
+  
+  // 4.  Sort all movies in ascending order according to year.
+  [
+    { "$sort": { "year": -1 } }
+  ],
+  
+  // 5.  Movies that is either action or fantasy.
+  { "$or": [ { "genre": "action" }, { "genre": "fantasy" } ] },
+  
+  // 6.  Find movies released after 2005.
+  { "year": { "$gte": 2005 } },
+  
+  // 7.  Quentin Tarantino movies that has either Christoph Waltz or Leonardo DiCaprio as its actors.
+  {
+    "director": "Quentin Tarantino",
+    "$or": [
+      {"actor": {"name": "Christoph Waltz"}},
+      {"actor": {"name": "Leonardo DiCaprio"}}
+    ]
+  },
+  
+  // 8.  How many movies directed by Christopher Nolan are in the database?
+  [
+    {
+      "$match": {"director": "Christopher Nolan"}
+    },
+    {
+      "$group": {
+        "_id": null, // Group all documents into a single group
+        "count": { "$sum": 1 } // Count the number of documents in the group
+      }
+    }
+  ],
+  
+  // 9.  How many movies in the database are released before the year 2000?
+  [
+    {
+      "$match": {"year": {"$lt": 2000}}
+    },
+    {
+      "$group": {
+        "_id": null, // Group all documents into a single group
+        "count": { "$sum": 1 } // Count the number of documents in the group
+      }
+    }
+  ]
+]

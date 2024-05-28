@@ -5,10 +5,11 @@
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
 		"Oracle.oracledevtools",
-        "vscjava.vscode-java-pack",
+		"vscjava.vscode-java-pack",
 		"donjayamanne.python-extension-pack",
 		"Oracle.oracledevtools",
-		"mechatroner.rainbow-csv"
+		"mechatroner.rainbow-csv",
+		"mongodb.mongodb-vscode"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
