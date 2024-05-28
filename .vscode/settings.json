@@ -1,7 +1,4 @@
 {
-  "Prettier-SQL.dialect": "plsql",
-  "Prettier-SQL.expressionWidth": 100,
-  "Prettier-SQL.linesBetweenQueries": 1,
   "[plsql]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "xyz.plsql-language"
@@ -25,4 +22,7 @@
           "color": "terminal.ansiGreen"
       },
   },
+  "files.exclude": {
+    "**/*.class": true
+  }
 }

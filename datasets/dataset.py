@@ -7,7 +7,7 @@ fake = Faker()
 
 def main():
     clubs = genClue()(500)
-    students = genStudents()(10000)
+    students = genStudents()(100000)
     classes = genClasses()(300)
     locations = genLocations()(1000)
     # each class has students from min to max
@@ -78,7 +78,7 @@ def genStudentJoinCoCurricular(students, co_curriculars):
 
 def genStudents(): 
     def gen(amount):
-        studentIDs = set(fake.unique.random_int(min=1650000, max=1750000) for i in range(amount))
+        studentIDs = set(fake.unique.random_int(min=1000000, max=1750000) for i in range(amount))
         students = []
         for id in studentIDs:
             students.append({ 'id': id, 'name': fake.name(), 'phone': fake.phone_number()[:20] })

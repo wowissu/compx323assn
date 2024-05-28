@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+  # maven: 
+  #   container_name: compx323_maven
+  #   image: maven:3.8.7-openjdk-18
+  #   tty: true
+  #   volumes:
+  #     - '..:/workspaces'
   java:
     container_name: compx323_java
     image: openjdk:latest
@@ -13,7 +19,6 @@ services:
     tty: true
     volumes:
       - '..:/workspaces'
-
   mongodb:
     container_name: compx323_mongo
     image: mongo:latest

@@ -1,0 +1,142 @@
+{
+  "club": [
+    {
+      "_id": 11,
+      "name": "Chess Club",
+      "description": "A club for chess enthusiasts"
+    },
+    {
+      "_id": 12,
+      "name": "Music Club",
+      "description": "A club for music lovers"
+    },
+    {
+      "_id": 13,
+      "name": "Dance Club",
+      "description": "A club for dance enthusiasts"
+    }
+  ],
+  "class": [
+    { 
+      "_id": 21,
+      "name": "Compx323",
+      "students": [ 1651328, 1657827, 1658920 ]
+    },
+    { 
+      "_id": 22,
+      "name": "Compx322",
+      "students": [ 1651328, 1657827, 1658920 ]
+    },
+    { 
+      "_id": 23,
+      "name": "Compx301",
+      "students": [ 1651328, 1657827, 1658920 ]
+    }
+  ],
+  "location": [
+    { 
+      "_id": 31,
+      "room": "Room A" 
+    },
+    { 
+      "_id": 32,
+      "room": "Room B" 
+    },
+    { 
+      "_id": 33,
+      "room": "Room C" 
+    }
+  ],
+  "student": [
+    { "_id": 1651328, "phone": "123456789", "name": "John Doe" },
+    { "_id": 1657827, "phone": "987654321", "name": "Jane Smith" },
+    { "_id": 1658920, "phone": "456789123", "name": "Alice Johnson" }
+  ],
+  "event": [
+    {
+      "_id": 41,
+      "class": 21,
+      "location": 31,
+      "type": "Laboratory",
+      "time": "2024-01-01T12:00:00Z"
+    },
+    {
+      "_id": 42,
+      "class": 22,
+      "location": 32,
+      "type": "Tutorial",
+      "time": "2024-01-01T11:00:00Z"
+    },
+    {
+      "_id": 43,
+      "class": 23,
+      "location": 33,
+      "type": "Lecture",
+      "time": "2024-01-01T14:00:00Z"
+    }
+  ],
+  "meeting": [
+    {
+      "_id": 51,
+      "date": "2024-04-30T00:00:00Z",
+      "startTime": "2024-01-01T13:00:00Z",
+      "endTime": "2024-01-01T14:00:00Z",
+      "minutes": "Meeting minutes for meeting 1",
+      "location": 31
+    },
+    {
+      "_id": 52,
+      "date": "2024-04-03T00:00:00Z",
+      "startTime": "2024-01-01T14:00:00Z",
+      "endTime": "2024-01-01T15:00:00Z",
+      "minutes": "Meeting minutes for meeting 2",
+      "location": 32
+    }
+  ],
+  "assignment": [
+    {
+      "_id": 61,
+      "assignmentName": "Assignment 1",
+      "class": 21,
+      "type": "Homework",
+      "time": "2024-05-30T00:00:00Z"
+    },
+    {
+      "_id": 62,
+      "assignmentName": "Assignment 2",
+      "class": 22,
+      "type": "Project"
+    }
+  ],
+  "curricular": [
+    { 
+      "meeting": 51, 
+      "assignmentName": "Assignment 1", 
+      "class": 21,
+      "students": [
+        { "student": 1651328, "attendance": true },
+        { "student": 1657827, "attendance": true }
+      ]
+    },
+    { 
+      "meeting": 52, 
+      "assignmentName": "Assignment 2", 
+      "class": 22,
+      "attendances": [
+        { "student": 1658920, "attendance": false }
+      ]
+    }
+  ],
+  "co_curricular": [
+    { 
+      "meeting": 51, 
+      "cost": 50, 
+      "club": 11 
+    },
+    { 
+      "meeting": 52, 
+      "cost": 30, 
+      "club": 12 
+    }
+  ]
+}

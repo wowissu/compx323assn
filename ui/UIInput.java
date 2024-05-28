@@ -4,13 +4,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class UIInput extends UIComponent<JPanel> {    
+public class UIInput extends UIComponent<JPanel> {
     JLabel labelComp;
     JTextField textFieldComp;
 
     public UIInput(String name, String label, int textColumns) {
         super(name);
-        
+
         root = new JPanel(new FlowLayout(FlowLayout.LEFT));
         this.setRoot(root);
 

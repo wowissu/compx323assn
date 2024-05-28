@@ -1,0 +1,50 @@
+[
+  {
+    "$match": {
+      "_id": 1651328
+    }
+  },
+  {
+    "$lookup": {
+      "from": "class",
+      "localField": "_id",
+      "foreignField": "students",
+      "as": "class"
+    }
+  },
+  {
+    "$unwind": "$class"
+  },
+  {
+    "$lookup": {
+      "from": "event",
+      "localField": "class._id",
+      "foreignField": "class",
+      "as": "events"
+    }
+  },
+  {
+    "$unwind": "$events"
+  },
+  {
+    "$lookup": {
+      "from": "location",
+      "localField": "events.location",
+      "foreignField": "_id",
+      "as": "location"
+    }
+  },
+  {
+    "$unwind": "$location"
+  },
+  {
+    "$project": {
+      "studentID": "$_id",
+      "studentName": "$student.name",
+      "className": "$class.name",
+      "locationRoom": "$location.room",
+      "eventType": "$events.type",
+      "eventTime": "$events.time"
+    }
+  }
+]
