@@ -17,10 +17,10 @@ import static com.mongodb.client.model.Updates.set;
 
 public class MongoQueryService implements QueryService {
 
-  String uri = "mongodb://localhost:27017/";
+  String uri = "mongodb://zs284:f7v-G07cig@mongodb.cms.waikato.ac.nz:27017/?authSource=admin";
   // private MongoClient conn;
   // private MongoDatabase db;
-  private String dbname = "compx323";
+  private String dbname = "zs284";
 
   public MongoQueryService() {
 
@@ -74,7 +74,7 @@ public class MongoQueryService implements QueryService {
             doc.getString("eventTime"),
         };
 
-        System.out.println(doc.toJson());
+        // System.out.println(doc.toJson());
 
         rowsList.add(row);
       }

@@ -102,7 +102,7 @@ public class main {
           Object newValue = model.getValueAt(row, column);
 
           if (column == 1) {
-            int studentID = Integer.parseInt((String) model.getValueAt(row, 0));
+            int studentID = Integer.parseInt(model.getValueAt(row, 0).toString());
             String newName = (String) newValue;
 
             try {

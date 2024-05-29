@@ -54,6 +54,8 @@ public class OracleQueryService implements QueryService {
           + "JOIN class_has_student chs ON s.id = chs.studentID "
           + "JOIN event e ON chs.className = e.className";
 
+      
+
       // student id
       if (studentID != null) {
         // System.out.println("search student id: " + studentID);
@@ -68,6 +70,9 @@ public class OracleQueryService implements QueryService {
         optionalParams.add(eventType);
       }
 
+      System.out.println("optionalParams length: " + optionalParams.size());
+      System.out.println(sql);
+
       PreparedStatement stmt = db.prepareStatement(sql);
       int index = 0;
       for (String params : optionalParams) {
@@ -77,6 +82,7 @@ public class OracleQueryService implements QueryService {
       List<Object[]> rowsList = new ArrayList<>();
 
       while (rs.next()) {
+        System.out.println(rs.getString("id"));
         Object[] row = new Object[] {
             rs.getString("id"),
             rs.getString("name"),
@@ -98,6 +104,7 @@ public class OracleQueryService implements QueryService {
 
       return rows;
     } catch (SQLException ex) {
+      System.out.println(ex);
       return null;
     }
   }

@@ -1,2 +1,2 @@
-javac -cp ".;lib\ojdbc10.jar;lib\mongodb-driver-sync-4.11.1.jar;lib\mongodb-driver-core-4.11.1.jar;lib\bson-4.11.1.jar" *.java
-java -cp ".;lib\ojdbc10.jar;lib\mongodb-driver-sync-4.11.1.jar;lib\mongodb-driver-core-4.11.1.jar;lib\bson-4.11.1.jar" main
+javac -cp ".;lib\ojdbc11.jar;lib\mongodb-driver-sync-4.11.1.jar;lib\mongodb-driver-core-4.11.1.jar;lib\bson-4.11.1.jar" *.java
+java -cp ".;lib\ojdbc11.jar;lib\mongodb-driver-sync-4.11.1.jar;lib\mongodb-driver-core-4.11.1.jar;lib\bson-4.11.1.jar" main
