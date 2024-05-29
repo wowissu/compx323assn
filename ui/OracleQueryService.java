@@ -17,10 +17,10 @@ public class OracleQueryService implements QueryService {
 
       // try select students
       System.out.println("start listing students");
-      PreparedStatement stmt = db.prepareStatement("SELECT * FROM student");
+      PreparedStatement stmt = db.prepareStatement("SELECT id, name FROM \"student\"");
       ResultSet rs = stmt.executeQuery();
 
-      while(rs.next()) {
+      while (rs.next()) {
         System.out.println(rs.getString("name"));
       }
       System.out.println("end listing students");
@@ -78,8 +78,8 @@ public class OracleQueryService implements QueryService {
         optionalParams.add(eventType);
       }
 
-      System.out.println("executeQuery: " + sql);    
-      System.out.println("optionalParams: " + optionalParams.size());    
+      System.out.println("executeQuery: " + sql);
+      System.out.println("optionalParams: " + optionalParams.size());
 
       PreparedStatement stmt = db.prepareStatement(sql);
       int index = 0;
@@ -90,19 +90,19 @@ public class OracleQueryService implements QueryService {
       List<Object[]> rowsList = new ArrayList<>();
 
       while (rs.next()) {
-        System.out.println(rs.getString("id"));    
+        System.out.println(rs.getString("id"));
         Object[] row = new Object[] {
-          rs.getString("id"),
-          rs.getString("name"),
-          rs.getString("className"),
-          rs.getString("locationRoom"),
-          rs.getString("eventType"),
-          rs.getString("eventTime"),
+            rs.getString("id"),
+            rs.getString("name"),
+            rs.getString("className"),
+            rs.getString("locationRoom"),
+            rs.getString("eventType"),
+            rs.getString("eventTime"),
         };
 
-        System.out.println(rs.getString("id"));        
+        System.out.println(rs.getString("id"));
         rowsList.add(row);
-      }       
+      }
 
       Object[][] rows = new Object[rowsList.size()][];
       for (int i = 0; i < rowsList.size(); i++) {
