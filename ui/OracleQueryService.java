@@ -14,17 +14,6 @@ public class OracleQueryService implements QueryService {
       db = DriverManager.getConnection(url, user, pwd);
 
       System.out.println("Connected !");
-
-      // try select students
-      System.out.println("start listing students");
-      PreparedStatement stmt = db.prepareStatement("SELECT id, name FROM \"student\"");
-      ResultSet rs = stmt.executeQuery();
-
-      while (rs.next()) {
-        System.out.println(rs.getString("name"));
-      }
-      System.out.println("end listing students");
-
     } catch (Exception e) {
       System.out.println(e);
     }
@@ -40,17 +29,19 @@ public class OracleQueryService implements QueryService {
     }
   }
 
-  public void updateStudentName(Integer studentID, String newName) {
-    try {
-      String sql = "UPDATE student SET name = ? WHERE id = ?";
+  public void updateStudentName(Integer studentID, String newName) throws SQLException {
+    String sql = "UPDATE student SET name = ? WHERE id = ?";
 
-      PreparedStatement stmt = db.prepareStatement(sql);
+    PreparedStatement stmt = db.prepareStatement(sql);
 
-      stmt.setString(0, newName);
-      stmt.setString(1, studentID.toString());
-    } catch (SQLException ex) {
-      System.out.println(ex);
-    }
+    stmt.setString(1, newName);
+    stmt.setString(2, studentID.toString());
+
+    int rowsUpdated = stmt.executeUpdate();
+
+    System.out.println("Update number of rows: " + rowsUpdated);
+    
+    stmt.close();
   }
 
   public Object[][] students(Integer studentID, String eventType) {
@@ -61,7 +52,6 @@ public class OracleQueryService implements QueryService {
       String sql = "SELECT s.id, s.name, chs.className, e.locationRoom, e.type as eventType, to_char(e.time, 'HH24:MI:SS') as eventTime "
           + "FROM student s "
           + "JOIN class_has_student chs ON s.id = chs.studentID "
-          // + "JOIN class c ON c.name = chs.className "
           + "JOIN event e ON chs.className = e.className";
 
       // student id
@@ -78,9 +68,6 @@ public class OracleQueryService implements QueryService {
         optionalParams.add(eventType);
       }
 
-      System.out.println("executeQuery: " + sql);
-      System.out.println("optionalParams: " + optionalParams.size());
-
       PreparedStatement stmt = db.prepareStatement(sql);
       int index = 0;
       for (String params : optionalParams) {
@@ -90,7 +77,6 @@ public class OracleQueryService implements QueryService {
       List<Object[]> rowsList = new ArrayList<>();
 
       while (rs.next()) {
-        System.out.println(rs.getString("id"));
         Object[] row = new Object[] {
             rs.getString("id"),
             rs.getString("name"),
@@ -99,8 +85,6 @@ public class OracleQueryService implements QueryService {
             rs.getString("eventType"),
             rs.getString("eventTime"),
         };
-
-        System.out.println(rs.getString("id"));
         rowsList.add(row);
       }
 

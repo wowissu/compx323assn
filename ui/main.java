@@ -12,15 +12,15 @@ import java.awt.event.WindowEvent;
 
 public class main {
 
-  // static OracleQueryService service;
-  static MongoQueryService service;
+  static OracleQueryService service;
+  // static MongoQueryService service;
   static UIRender render;
 
   static UITable table;
 
   public static void main(String[] args) {
-    // service = new OracleQueryService();
-    service = new MongoQueryService();
+    service = new OracleQueryService();
+    // service = new MongoQueryService();
     render = createRender();
 
     // JPanel layout = UIRender.createYPanel();
@@ -50,7 +50,6 @@ public class main {
       studentIDInteger = studentIDString == null ? null : Integer.parseInt(studentIDString);
 
     } catch (NumberFormatException ex) {
-      System.out.println("Invalid integer input");
       studentIDInteger = null;
     }
 
@@ -103,13 +102,19 @@ public class main {
           Object newValue = model.getValueAt(row, column);
 
           if (column == 1) {
-            int studentID = (int) model.getValueAt(row, 0);
+            int studentID = Integer.parseInt((String) model.getValueAt(row, 0));
             String newName = (String) newValue;
 
-            service.updateStudentName(studentID, newName);
+            try {
+              service.updateStudentName(studentID, newName);
 
-            if (uiTable != null) {
-              onSubmit(uiTable);
+              System.out.println(studentID + " is updated");
+
+              if (uiTable != null) {
+                onSubmit(uiTable);
+              }
+            } catch (Exception ex) {
+              System.out.println("Failed to update data!"); 
             }
           }
         }

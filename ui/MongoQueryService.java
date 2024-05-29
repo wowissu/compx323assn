@@ -29,13 +29,12 @@ public class MongoQueryService implements QueryService {
   public void close() {
   }
 
-  public void updateStudentName(Integer studentID, String newName) {
-    try (MongoClient mongoClient = MongoClients.create(uri)) {
-      MongoDatabase database = mongoClient.getDatabase(dbname);
-      MongoCollection<Document> studentCollection = database.getCollection("student");
+  public void updateStudentName(Integer studentID, String newName) throws Exception {
+    MongoClient mongoClient = MongoClients.create(uri);
+    MongoDatabase database = mongoClient.getDatabase(dbname);
+    MongoCollection<Document> studentCollection = database.getCollection("student");
 
-      studentCollection.updateOne(eq("_id", studentID), set("name", newName));
-    }
+    studentCollection.updateOne(eq("_id", studentID), set("name", newName));
   }
 
   public Object[][] students(Integer studentID, String eventType) {
