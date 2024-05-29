@@ -1,0 +1,13 @@
+[{
+  "_id": 61,
+  "assignmentName": "Assignment 1",
+  "class": 21,
+  "type": "Homework",
+  "time": "2024-05-30T00:00:00Z"
+},
+{
+  "_id": 62,
+  "assignmentName": "Assignment 2",
+  "class": 22,
+  "type": "Project"
+}]

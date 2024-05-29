@@ -1,0 +1,21 @@
+[{
+  "_id": 41,
+  "class": 21,
+  "location": 31,
+  "type": "Laboratory",
+  "time": "2024-01-01T12:00:00Z"
+},
+{
+  "_id": 42,
+  "class": 21,
+  "location": 32,
+  "type": "Tutorial",
+  "time": "2024-01-01T11:00:00Z"
+},
+{
+  "_id": 43,
+  "class": 23,
+  "location": 33,
+  "type": "Lecture",
+  "time": "2024-01-01T14:00:00Z"
+}]

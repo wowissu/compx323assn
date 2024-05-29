@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "66557a0648399923f8940037"
+  },
+  "meeting": 51,
+  "assignmentName": "Assignment 1",
+  "class": 21,
+  "students": [
+    {
+      "student": 1651328,
+      "attendance": true
+    },
+    {
+      "student": 1657827,
+      "attendance": true
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "66557a0648399923f8940038"
+  },
+  "meeting": 52,
+  "assignmentName": "Assignment 2",
+  "class": 22,
+  "attendances": [
+    {
+      "student": 1658920,
+      "attendance": false
+    }
+  ]
+}]

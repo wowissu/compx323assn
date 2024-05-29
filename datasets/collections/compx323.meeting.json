@@ -1,0 +1,16 @@
+[{
+  "_id": 51,
+  "date": "2024-04-30T00:00:00Z",
+  "startTime": "2024-01-01T13:00:00Z",
+  "endTime": "2024-01-01T14:00:00Z",
+  "minutes": "Meeting minutes for meeting 1",
+  "location": 31
+},
+{
+  "_id": 52,
+  "date": "2024-04-03T00:00:00Z",
+  "startTime": "2024-01-01T14:00:00Z",
+  "endTime": "2024-01-01T15:00:00Z",
+  "minutes": "Meeting minutes for meeting 2",
+  "location": 32
+}]

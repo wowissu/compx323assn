@@ -1,0 +1,15 @@
+[{
+  "_id": 11,
+  "name": "Chess Club",
+  "description": "A club for chess enthusiasts"
+},
+{
+  "_id": 12,
+  "name": "Music Club",
+  "description": "A club for music lovers"
+},
+{
+  "_id": 13,
+  "name": "Dance Club",
+  "description": "A club for dance enthusiasts"
+}]
