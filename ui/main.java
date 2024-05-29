@@ -12,25 +12,57 @@ import java.awt.event.WindowEvent;
 
 public class main {
 
-  static OracleQueryService service;
-  // static MongoQueryService service;
+  // static OracleQueryService service;
+  static MongoQueryService service;
   static UIRender render;
 
+  static UITable table;
+
   public static void main(String[] args) {
-    service = new OracleQueryService();
-    // service = new MongoQueryService();
+    // service = new OracleQueryService();
+    service = new MongoQueryService();
     render = createRender();
 
     // JPanel layout = UIRender.createYPanel();
     JLabel header = new JLabel("Find student's classes.");
 
     UITable table = createTable(service);
-    JComponent form = createForm(table);
+    JComponent form = createForm(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        onSubmit(table);
+      }
+    });
 
     render.add(header);
     render.add(form);
     render.add(table.root);
     render.setVisible(true);
+  }
+
+  static void onSubmit(UITable uiTable) {
+    Integer studentIDInteger = null;
+    String studentIDString = UIRender.get("studentID", UIInput.class).getValue();
+    String eventTypeString = UIRender.get("eventType", UIComboBox.class).getValue();
+
+    System.out.println(studentIDString);
+
+    try {
+      studentIDInteger = studentIDString == null ? null : Integer.parseInt(studentIDString);
+
+    } catch (NumberFormatException ex) {
+      System.out.println("Invalid integer input");
+      studentIDInteger = null;
+    }
+
+    Object[][] rows = service.students(
+        studentIDInteger,
+        eventTypeString);
+
+    uiTable.clear();
+
+    for (int i = 0; i < rows.length; i++) {
+      uiTable.addRow(rows[i]);
+    }
   }
 
   static UIRender createRender() {
@@ -59,9 +91,11 @@ public class main {
       }
     };
 
+    UITable uiTable = new UITable("table", model);
+
     model.addTableModelListener(new TableModelListener() {
+
       public void tableChanged(TableModelEvent e) {
-        System.out.println("Why it don't trigger this event????");
 
         if (e.getType() == TableModelEvent.UPDATE) {
           int row = e.getFirstRow();
@@ -73,48 +107,24 @@ public class main {
             String newName = (String) newValue;
 
             service.updateStudentName(studentID, newName);
+
+            if (uiTable != null) {
+              onSubmit(uiTable);
+            }
           }
         }
       }
     });
 
-    UITable uiTable = new UITable("table", model);
-
     return uiTable;
   }
 
-  static JComponent createForm(UITable uiTable) {
+  static JComponent createForm(ActionListener listener) {
     UIInput studentIDInput = UIRender.createInput("studentID", "Enter student id:");
     UIComboBox eventTypeComboBox = UIRender.createComboBox("eventType", "Choice a event type",
         new String[] { "All", "Laboratory", "Tutorial", "Lecture" });
 
-    JPanel submitButton = UIRender.createSubmitButton("Submit", new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        Integer studentIDInteger = null;
-        String studentIDString = UIRender.get("studentID", UIInput.class).getValue();
-        String eventTypeString = UIRender.get("eventType", UIComboBox.class).getValue();
-
-        System.out.println(studentIDString);
-
-        try {
-          studentIDInteger = studentIDString == null ? null : Integer.parseInt(studentIDString);
-
-        } catch (NumberFormatException ex) {
-          System.out.println("Invalid integer input");
-          studentIDInteger = null;
-        }
-
-        Object[][] rows = service.students(
-            studentIDInteger,
-            eventTypeString);
-
-        uiTable.clear();
-
-        for (int i = 0; i < rows.length; i++) {
-          uiTable.addRow(rows[i]);
-        }
-      }
-    });
+    JPanel submitButton = UIRender.createSubmitButton("Submit", listener);
 
     JPanel form = UIRender.createYPanel();
     form.add(studentIDInput.root);
