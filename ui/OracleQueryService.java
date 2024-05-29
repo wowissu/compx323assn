@@ -2,13 +2,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.Document;
-
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
 public class OracleQueryService implements QueryService {
   String url = "jdbc:oracle:thin:@oracle.cms.waikato.ac.nz:1521:teaching";
   String user = "zs284";
@@ -21,6 +14,16 @@ public class OracleQueryService implements QueryService {
       db = DriverManager.getConnection(url, user, pwd);
 
       System.out.println("Connected !");
+
+      // try select students
+      System.out.println("start listing students");
+      PreparedStatement stmt = db.prepareStatement("SELECT * FROM student");
+      ResultSet rs = stmt.executeQuery();
+
+      while(rs.next()) {
+        System.out.println(rs.getString("name"));
+      }
+      System.out.println("end listing students");
 
     } catch (Exception e) {
       System.out.println(e);
@@ -59,7 +62,7 @@ public class OracleQueryService implements QueryService {
           + "FROM student s "
           + "JOIN class_has_student chs ON s.id = chs.studentID "
           // + "JOIN class c ON c.name = chs.className "
-          + "JOIN event e ON c.name = e.className";
+          + "JOIN event e ON chs.className = e.className";
 
       // student id
       if (studentID != null) {
@@ -75,6 +78,9 @@ public class OracleQueryService implements QueryService {
         optionalParams.add(eventType);
       }
 
+      System.out.println("executeQuery: " + sql);    
+      System.out.println("optionalParams: " + optionalParams.size());    
+
       PreparedStatement stmt = db.prepareStatement(sql);
       int index = 0;
       for (String params : optionalParams) {
@@ -84,15 +90,19 @@ public class OracleQueryService implements QueryService {
       List<Object[]> rowsList = new ArrayList<>();
 
       while (rs.next()) {
-        rowsList.add(new Object[] {
-            rs.getString("id"),
-            rs.getString("name"),
-            rs.getString("className"),
-            rs.getString("locationRoom"),
-            rs.getString("eventType"),
-            rs.getString("eventTime"),
-        });
-      }
+        System.out.println(rs.getString("id"));    
+        Object[] row = new Object[] {
+          rs.getString("id"),
+          rs.getString("name"),
+          rs.getString("className"),
+          rs.getString("locationRoom"),
+          rs.getString("eventType"),
+          rs.getString("eventTime"),
+        };
+
+        System.out.println(rs.getString("id"));        
+        rowsList.add(row);
+      }       
 
       Object[][] rows = new Object[rowsList.size()][];
       for (int i = 0; i < rowsList.size(); i++) {

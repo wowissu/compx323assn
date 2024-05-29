@@ -1,2 +1,2 @@
-javac -cp "lib/*:." *.java
-java -cp "lib/*:." main
+javac -cp "./lib/*:." *.java
+java -cp "./lib/*:." main

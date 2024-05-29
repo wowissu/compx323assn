@@ -1,12 +1,9 @@
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,13 +12,13 @@ import java.awt.event.WindowEvent;
 
 public class main {
 
-  // static OracleQueryService service;
-  static MongoQueryService service;
+  static OracleQueryService service;
+  // static MongoQueryService service;
   static UIRender render;
 
   public static void main(String[] args) {
-    // service = new OracleQueryService();
-    service = new MongoQueryService();
+    service = new OracleQueryService();
+    // service = new MongoQueryService();
     render = createRender();
 
     // JPanel layout = UIRender.createYPanel();
@@ -58,7 +55,6 @@ public class main {
     DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
-        // 使第二列（Name）可编辑
         return column == 1;
       }
     };
@@ -101,7 +97,7 @@ public class main {
         System.out.println(studentIDString);
 
         try {
-          studentIDInteger = Integer.parseInt(studentIDString);
+          studentIDInteger = studentIDString == null ? null : Integer.parseInt(studentIDString);
 
         } catch (NumberFormatException ex) {
           System.out.println("Invalid integer input");
